@@ -1,0 +1,9 @@
+[package]
+name = "clearbar-common"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+windows.workspace = true
