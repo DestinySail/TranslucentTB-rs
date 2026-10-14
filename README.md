@@ -29,6 +29,7 @@ Clearbar 是用 Rust 重写的 Windows 11 任务栏透明工具，只做两件�
 3. 右下角出现蓝色“T”图标（可能在“∧”收起区里），右键即可勾选开机启动或选择退出。
 
 目前面向 Windows 11 x64。首次运行不会自动开启自启，需要的话在托盘菜单里勾选一次。
+单个 `clearbar.exe` 自带运行库与内嵌 DLL：不需要安装 .NET、VC++ 运行库，也不需要额外下载文件。
 
 ## 托盘菜单
 
@@ -97,7 +98,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build.ps1 -Test
 - 只面向 Windows 11 的 XAML 任务栏与 x64，实机基线为 25H2 / 26200.9457；不支持 Windows 10、ARM64 或旧版任务栏替换工具。
 - Windows 更新可能改变内部节点，需要重新验证；进入桌面后可能短暂显示默认背景，初始化失败时后台重试，不弹窗阻塞操作。
 - XAML Diagnostics 会把 DLL 留在 Explorer 中：停止程序会恢复背景，但 DLL 要等 Explorer 退出才卸载。更新 DLL 后建议重启电脑，不要覆盖正在加载的 DLL。
-- 原型版本：没有代码签名、安装程序和自动更新。真实重启后的自启时序，以及 Explorer 真正重启后的重连，仍需单独验收。
+- 原型版本：没有代码签名、安装程序和自动更新。下载后首次运行可能被 Windows SmartScreen 拦截，点“更多信息 → 仍要运行”即可。真实重启后的自启时序，以及 Explorer 真正重启后的重连，仍需单独验收。
 - 详细实测记录见 [VALIDATION.md](VALIDATION.md)，第三方组件许可见 [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md)。
 
 ## 许可证

@@ -2,6 +2,23 @@
 
 时间：2026-10-14（Asia/Shanghai）。
 
+## 0.1.3 自包含单文件
+
+- 构建改为静态链接 CRT（`-C target-feature=+crt-static`，由 `scripts/build.ps1` 或本地 `.cargo/config.toml` 提供）。
+- 变更前，EXE 与内嵌 TAP DLL 的导入表都含 `vcruntime140.dll` 和 `api-ms-win-crt-*`；
+  变更后只剩 `kernel32` / `user32` / `ole32` / `shell32` / `oleaut32` / `advapi32` / `propsys` / `dbghelp` /
+  `bcryptprimitives` / `ntdll` 与 `api-ms-win-core-*` 这些系统组件。
+  本机 System32 中的 `vcruntime140.dll` 来自已安装的 Microsoft Visual C++ v14 Redistributable，
+  不属于 Windows 自带文件，因此原包在没有该运行库的机器上会启动失败；静态链接后不再有这个前置条件。
+- 体积变化：`clearbar.exe` 474,624 → 671,744 字节；内嵌 TAP DLL 337,408 字节。
+- 静态 CRT 版本已在本机实测：停止 0.1.2 实例后启动 0.1.3，日志记录
+  `Embedded TAP extracted`（新内容指纹目录）、`Tray icon added`、`Transparency applied by Explorer UI thread`，
+  任务栏背景截图仍为透明，`--status` 返回 `running=true / transparent=true / startup=true`。
+- 启动时自启快捷方式已刷新为新路径：`dist\Clearbar-0.1.3-<时间戳>\clearbar.exe --startup`。
+- 从 GitHub Release 下载回来的 `clearbar.exe` 与本地构建产物 SHA-256 一致（v0.1.2 已核对，
+  流程为 `gh release download` + `Get-FileHash` 对比 `SHA256SUMS.txt`）。
+- 仍未验证：其它机器（未装 VC++ 运行库的干净系统）的实际首次运行、SmartScreen 提示的实际表现。
+
 ## 0.1.2 托盘开机启动开关
 
 - 原生托盘右键菜单新增带勾选状态的“开机启动”，保留“退出”。
