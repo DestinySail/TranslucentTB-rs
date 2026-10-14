@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="340" viewBox="0 0 1200 340"
+     role="img" aria-labelledby="heroTitle heroDesc">
+  <title id="heroTitle">Clearbar — 让 Windows 11 任务栏背景完全透明</title>
+  <desc id="heroDesc">左侧是名称与一句话说明，右侧是托盘右键菜单：开机启动勾选项与退出。</desc>
+
+  <defs>
+    <clipPath id="heroFrame">
+      <rect x="0" y="0" width="1200" height="340" rx="26"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#heroFrame)">
+    <rect width="1200" height="340" fill="#0B0F15"/>
+    <rect x="0" y="0" width="4" height="340" fill="#197DD2"/>
+
+    <g id="title-block" transform="translate(64 0)">
+      <g id="tray-mark" transform="translate(14 64)">
+        <circle r="14" fill="#197DD2"/>
+        <path d="M-6 -6 H6 M0 -6 V7" stroke="#FFFFFF" stroke-width="3.2"
+              stroke-linecap="round" fill="none"/>
+      </g>
+      <text x="40" y="69" font-family="ui-monospace, SFMono-Regular, Consolas, monospace"
+            font-size="14" fill="#8A9BAE">WINDOWS 11 · 任务栏透明化</text>
+
+      <text x="0" y="152" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif"
+            font-size="68" font-weight="700" fill="#E8F1F8">Clearbar</text>
+
+      <text x="0" y="200" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif"
+            font-size="20" fill="#C6D4E0">让 Windows 11 任务栏背景完全透明。</text>
+      <text x="0" y="230" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif"
+            font-size="20" fill="#C6D4E0">单文件 EXE，双击即用；右键托盘图标开关自启或退出。</text>
+
+      <text x="0" y="278" font-family="ui-monospace, SFMono-Regular, Consolas, monospace"
+            font-size="14" fill="#8A9BAE">Rust 重写 · 无安装程序 · 无账号 · 无联网 · 无设置界面</text>
+    </g>
+
+    <g id="menu-specimen" transform="translate(700 46)">
+      <rect width="436" height="248" rx="16" fill="#121A24" stroke="#1E2A38"/>
+
+      <text x="26" y="34" font-family="ui-monospace, SFMono-Regular, Consolas, monospace"
+            font-size="13" fill="#8A9BAE">托盘右键菜单</text>
+
+      <rect x="26" y="48" width="224" height="106" rx="10" fill="#0E1620" stroke="#2E3F52"/>
+      <path d="M40 84 l6 6 l11 -12" stroke="#4CC2FF" stroke-width="2.4"
+            stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <text x="70" y="92" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif"
+            font-size="17" fill="#E8F1F8">开机启动</text>
+      <path d="M42 110 H234" stroke="#2E3F52" stroke-width="1"/>
+      <text x="70" y="140" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif"
+            font-size="17" fill="#E8F1F8">退出</text>
+
+      <g id="tray-icon" transform="translate(316 84)">
+        <circle r="18" fill="#197DD2"/>
+        <path d="M-8 -8 H8 M0 -8 V9" stroke="#FFFFFF" stroke-width="3.6"
+              stroke-linecap="round" fill="none"/>
+      </g>
+      <text x="286" y="126" font-family="ui-monospace, SFMono-Regular, Consolas, monospace"
+            font-size="12" fill="#8A9BAE">通知区域的 T</text>
+
+      <text x="26" y="188" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif"
+            font-size="15" fill="#8A9BAE">勾选 = 开机自启</text>
+      <text x="26" y="214" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif"
+            font-size="15" fill="#8A9BAE">取消 = 关闭自启，透明效果继续</text>
+    </g>
+  </g>
+</svg>

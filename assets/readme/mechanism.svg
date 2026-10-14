@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="480" viewBox="0 0 1200 480"
+     role="img" aria-labelledby="mechTitle mechDesc">
+  <title id="mechTitle">Clearbar 的工作方式</title>
+  <desc id="mechDesc">上排是透明化路径：主程序等待任务栏并释放 TAP DLL，DLL 注入 explorer.exe，通过 XAML Diagnostics 把任务栏背景矩形的不透明度改为 0；下排是开机自启与退出两条控制路径。</desc>
+
+  <rect width="1200" height="480" rx="26" fill="#0B0F15"/>
+
+  <g id="lane-transparent">
+    <text x="64" y="52" font-family="ui-monospace, SFMono-Regular, Consolas, monospace"
+          font-size="14" fill="#8A9BAE">透明化路径</text>
+
+    <g id="box-app">
+      <rect x="64" y="76" width="304" height="140" rx="14" fill="#121A24" stroke="#1E2A38"/>
+      <text x="88" y="110" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+            font-size="17" font-weight="600" fill="#E8F1F8">clearbar.exe</text>
+      <text x="88" y="142" font-family="ui-monospace, SFMono-Regular, Consolas, monospace"
+            font-size="13" fill="#8A9BAE">等待 Shell_TrayWnd（1→30s 退避）</text>
+      <text x="88" y="166" font-family="ui-monospace, SFMono-Regular, Consolas, monospace"
+            font-size="13" fill="#8A9BAE">释放内嵌的 TAP DLL</text>
+      <text x="88" y="190" font-family="ui-monospace, SFMono-Regular, Consolas, monospace"
+            font-size="13" fill="#8A9BAE">退出时请求恢复背景</text>
+    </g>
+
+    <g id="arrow-a-b">
+      <path d="M368 146 H432" stroke="#4CC2FF" stroke-width="2"/>
+      <path d="M424 139 l10 7 l-10 7" stroke="#4CC2FF" stroke-width="2" fill="none"
+            stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="374" y="132" font-family="ui-monospace, SFMono-Regular, Consolas, monospace"
+            font-size="12" fill="#8A9BAE">线程钩子</text>
+    </g>
+
+    <g id="box-explorer">
+      <rect x="444" y="76" width="304" height="140" rx="14" fill="#121A24" stroke="#1E2A38"/>
+      <text x="468" y="110" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+            font-size="17" font-weight="600" fill="#E8F1F8">explorer.exe</text>
+      <text x="468" y="142" font-family="ui-monospace, SFMono-Regular, Consolas, monospace"
+            font-size="13" fill="#8A9BAE">临时线程钩子加载 DLL</text>
+      <text x="468" y="166" font-family="ui-monospace, SFMono-Regular, Consolas, monospace"
+            font-size="13" fill="#8A9BAE">DllMain 只保存模块句柄</text>
+      <text x="468" y="190" font-family="ui-monospace, SFMono-Regular, Consolas, monospace"
+            font-size="13" fill="#8A9BAE">在 UI 线程内执行修改</text>
+    </g>
+
+    <g id="arrow-b-c">
+      <path d="M748 146 H812" stroke="#4CC2FF" stroke-width="2"/>
+      <path d="M804 139 l10 7 l-10 7" stroke="#4CC2FF" stroke-width="2" fill="none"
+            stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="758" y="132" font-family="ui-monospace, SFMono-Regular, Consolas, monospace"
+            font-size="12" fill="#8A9BAE">XAML</text>
+    </g>
+
+    <g id="box-xaml">
+      <rect x="824" y="76" width="312" height="140" rx="14" fill="#121A24" stroke="#4CC2FF"/>
+      <text x="848" y="110" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+            font-size="17" font-weight="600" fill="#E8F1F8">任务栏 XAML 节点</text>
+      <text x="848" y="142" font-family="ui-monospace, SFMono-Regular, Consolas, monospace"
+            font-size="13" fill="#8A9BAE">Taskbar.TaskbarFrame</text>
+      <text x="848" y="166" font-family="ui-monospace, SFMono-Regular, Consolas, monospace"
+            font-size="13" fill="#4CC2FF">BackgroundFill → Opacity 0</text>
+      <text x="848" y="190" font-family="ui-monospace, SFMono-Regular, Consolas, monospace"
+            font-size="13" fill="#4CC2FF">BackgroundStroke → Opacity 0</text>
+    </g>
+
+    <text x="64" y="244" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif"
+          font-size="14" fill="#8A9BAE">只改这两个背景矩形，图标、文字、输入与任务栏布局保持不变；写入后会读回验证不透明度。</text>
+  </g>
+
+  <path d="M64 276 H1136" stroke="#1E2A38" stroke-width="1"/>
+
+  <g id="lane-control">
+    <text x="64" y="312" font-family="ui-monospace, SFMono-Regular, Consolas, monospace"
+          font-size="14" fill="#8A9BAE">两条控制路径</text>
+
+    <g id="box-startup">
+      <rect x="64" y="332" width="484" height="112" rx="14" fill="#121A24" stroke="#1E2A38"/>
+      <text x="88" y="366" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif"
+            font-size="17" font-weight="600" fill="#E8F1F8">开机自启（托盘菜单勾选）</text>
+      <text x="88" y="396" font-family="ui-monospace, SFMono-Regular, Consolas, monospace"
+            font-size="13" fill="#8A9BAE">启动文件夹写 Clearbar.lnk，参数 --startup</text>
+      <text x="88" y="420" font-family="ui-monospace, SFMono-Regular, Consolas, monospace"
+            font-size="13" fill="#8A9BAE">任务管理器“启动应用”里可见，可被系统禁用</text>
+    </g>
+
+    <g id="box-restore">
+      <rect x="572" y="332" width="564" height="112" rx="14" fill="#121A24" stroke="#1E2A38"/>
+      <text x="596" y="366" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif"
+            font-size="17" font-weight="600" fill="#E8F1F8">退出或异常结束（自动恢复）</text>
+      <text x="596" y="396" font-family="ui-monospace, SFMono-Regular, Consolas, monospace"
+            font-size="13" fill="#8A9BAE">写回首次捕获的不透明度，任务栏回到系统默认外观</text>
+      <text x="596" y="420" font-family="ui-monospace, SFMono-Regular, Consolas, monospace"
+            font-size="13" fill="#8A9BAE">Explorer 重启后重新等待并连接新任务栏</text>
+    </g>
+  </g>
+</svg>
