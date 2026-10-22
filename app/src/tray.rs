@@ -1,6 +1,6 @@
 use std::{panic::catch_unwind, sync::atomic::{AtomicU32, Ordering}, time::{Duration, Instant}};
 use clearbar_common::{log, signal, wide};
-use windows::{core::{w, Error, GUID, Result}, Win32::{Foundation::*, System::LibraryLoader::GetModuleHandleW,
+use windows::{core::{w, Error, GUID, PCWSTR, Result}, Win32::{Foundation::*, System::LibraryLoader::GetModuleHandleW,
     UI::{Shell::*, WindowsAndMessaging::*}}};
 
 pub const WINDOW_CLASS: windows::core::PCWSTR = w!("Clearbar.Tray.0.1");
@@ -8,6 +8,7 @@ const CALLBACK: u32 = WM_APP + 1;
 const EXIT: usize = 1;
 const STARTUP: usize = 2;
 const ICON_GUID: GUID = GUID::from_u128(0x62f739ae_96e9_4d13_bbb5_aee6aca83ba3);
+const APP_ICON: usize = 1;
 static TASKBAR_CREATED: AtomicU32 = AtomicU32::new(0);
 
 pub struct Tray { hwnd: HWND, icon: HICON, last_refresh: Instant }
@@ -16,7 +17,7 @@ impl Tray {
     pub fn new() -> Result<Self> {
         unsafe {
             let module = GetModuleHandleW(None)?;
-            let icon = make_icon(module)?;
+            let icon = load_icon(module)?;
             let class = WNDCLASSW { hInstance: module.into(), lpszClassName: WINDOW_CLASS,
                 lpfnWndProc: Some(window_proc), ..Default::default() };
             if RegisterClassW(&class) == 0 { let _ = DestroyIcon(icon); return Err(Error::from_win32()); }
@@ -162,21 +163,11 @@ unsafe fn toggle_startup(hwnd: HWND) {
     }
 }
 
-unsafe fn make_icon(instance: HMODULE) -> Result<HICON> {
-    // A small native raster icon: white T inside a blue circle. No external asset is required.
-    let mut mask = [0xffu8; 128];
-    let mut pixels = [0u8; 32 * 32 * 4];
-    for y in 0..32usize {
-        for x in 0..32usize {
-            if (x as i32 * 2 - 31).pow(2) + (y as i32 * 2 - 31).pow(2) > 29 * 29 { continue; }
-            let row = 31 - y;
-            mask[row * 4 + x / 8] &= !(0x80 >> (x % 8));
-            let white = ((8..24).contains(&x) && (8..12).contains(&y))
-                || ((14..18).contains(&x) && (10..24).contains(&y));
-            let color = if white { [255, 255, 255, 255] } else { [210, 125, 25, 255] };
-            let offset = (row * 32 + x) * 4;
-            pixels[offset..offset + 4].copy_from_slice(&color);
-        }
-    }
-    CreateIcon(instance, 32, 32, 1, 32, mask.as_ptr(), pixels.as_ptr())
+unsafe fn load_icon(instance: HMODULE) -> Result<HICON> {
+    // Use the same multi-size ICO embedded in the executable, including at scaled tray sizes.
+    let width = GetSystemMetrics(SM_CXSMICON);
+    let height = GetSystemMetrics(SM_CYSMICON);
+    let handle = LoadImageW(instance, PCWSTR(APP_ICON as *const u16), IMAGE_ICON,
+        width, height, LR_DEFAULTCOLOR)?;
+    Ok(HICON(handle.0))
 }
